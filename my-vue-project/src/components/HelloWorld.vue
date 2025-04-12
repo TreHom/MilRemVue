@@ -1,6 +1,6 @@
 <template>
   <l-map
-    style="height: 500px; width: 100%;"
+    style="height: 1000px; width: 100%;"
     :zoom="13"
     :center="[58.3776, 26.7290]"
   >
