@@ -1,16 +1,24 @@
 <template>
     <div class="control-panel">
-      <button @click="$emit('move', 'north')" :disabled="!props.engineStatus">↑</button>
+      <button @click="handleMove('north')" :class="{ 'inactive': !props.engineStatus }">↑</button>
       <div class="horizontal-controls">
-        <button @click="$emit('move', 'west')" :disabled="!props.engineStatus">←</button>
-        <button @click="$emit('move', 'east')" :disabled="!props.engineStatus">→</button>
+        <button @click="handleMove('west')" :class="{ 'inactive': !props.engineStatus }">←</button>
+        <button @click="handleMove('east')" :class="{ 'inactive': !props.engineStatus }">→</button>
       </div>
-      <button @click="$emit('move', 'south')" :disabled="!props.engineStatus">↓</button>
+      <button @click="handleMove('south')" :class="{ 'inactive': !props.engineStatus }">↓</button>
+    </div>
+
+    <!-- Simple popup -->
+    <div v-if="showPopup" class="engine-popup">
+      <div class="popup-content">
+        <p>Please turn the engine on first!</p>
+        <button @click="showPopup = false">OK</button>
+      </div>
     </div>
   </template>
   
   <script setup>
-  import { defineProps } from 'vue';
+  import { defineProps, defineEmits, ref } from 'vue';
   
   const props = defineProps({
     engineStatus: {
@@ -18,6 +26,17 @@
       required: true
     }
   })
+
+  const emit = defineEmits(['move'])
+  const showPopup = ref(false)
+
+  function handleMove(direction) {
+    if (props.engineStatus) {
+      emit('move', direction)
+    } else {
+      showPopup.value = true
+    }
+  }
   </script>
   //Had AI write me the initial design for the buttons 
   <style scoped>
@@ -49,12 +68,51 @@
     font-size: 20px;
   }
   
-  button:disabled {
+  button.inactive {
     background: #eee;
-    cursor: not-allowed;
   }
   
-  button:hover:not(:disabled) {
+  button:hover {
     background: #f0f0f0;
+  }
+
+  /* Popup styles */
+  .engine-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+  }
+
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .popup-content p {
+    margin: 0 0 15px 0;
+  }
+
+  .popup-content button {
+    width: auto;
+    height: auto;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .popup-content button:hover {
+    background-color: #45a049;
   }
   </style>
