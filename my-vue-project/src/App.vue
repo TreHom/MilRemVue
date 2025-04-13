@@ -2,7 +2,7 @@
   <div class="app-container">
     <EngineStart :engineStatus="engineStatus" @updateEngineStatus="updateEngineStatus" />
     <MapApplication :vehiclePosition="vehiclePosition" />
-    <MovementControls :engineStatus="engineStatus" />
+    <MovementControls :engineStatus="engineStatus" @move="move" />
   </div>
 </template>
 
@@ -22,14 +22,38 @@ export default {
   setup() {
     const vehiclePosition = ref([58.3776, 26.7290])
     const engineStatus = ref(false)
+    
     const updateEngineStatus = (newStatus) => {
       engineStatus.value = newStatus
+    }
+
+    // Movement step size
+    const STEP_SIZE = 0.0001
+
+    const move = (direction) => {
+      if (!engineStatus.value) return
+
+      switch (direction) {
+        case 'north':
+          vehiclePosition.value = [vehiclePosition.value[0] + STEP_SIZE, vehiclePosition.value[1]]
+          break
+        case 'south':
+          vehiclePosition.value = [vehiclePosition.value[0] - STEP_SIZE, vehiclePosition.value[1]]
+          break
+        case 'east':
+          vehiclePosition.value = [vehiclePosition.value[0], vehiclePosition.value[1] + STEP_SIZE]
+          break
+        case 'west':
+          vehiclePosition.value = [vehiclePosition.value[0], vehiclePosition.value[1] - STEP_SIZE]
+          break
+      }
     }
 
     return {
       vehiclePosition,
       engineStatus,
-      updateEngineStatus
+      updateEngineStatus,
+      move
     }
   }
 }
