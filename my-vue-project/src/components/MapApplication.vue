@@ -1,19 +1,31 @@
 <template>
   <l-map
     ref="mapRef"
-    style="height: 90%; width: 100%;"
+    style="height: 90%; width: 80%; left:20%"
     :zoom="100"
     :center="props.vehiclePosition"
     @ready="onMapReady"
   >
     <l-tile-layer :url="tileUrl" :attribution="attribution" />
 
-    
     <VehicleMarker :vehiclePosition="props.vehiclePosition" />
+
+    <Waypoint 
+      v-for="waypoint in props.waypoints"
+      :key="waypoint.id"
+      :position="waypoint.location"
+      :is-saved="true"
+      :id="waypoint.id"
+      @addWaypoint="handleAddWaypoint"
+      @moveVehicle="handleMoveVehicle"
+      @discard="handleDiscard"
+    />
 
     <Waypoint 
       v-if="showPopup"
       :position="popupLocation"
+      :is-saved="false"
+      :id="'temp-' + Date.now()"
       @addWaypoint="handleAddWaypoint"
       @moveVehicle="handleMoveVehicle"
       @discard="handleDiscard"
@@ -24,13 +36,17 @@
 <script setup>
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer } from '@vue-leaflet/vue-leaflet'
-import { defineProps, ref } from 'vue'
+import { defineProps, ref, defineEmits } from 'vue'
 import VehicleMarker from './VehicleMarker.vue'
 import Waypoint from './WayPoint.vue'
 
-// Vehicle position prop
+// Vehicle position and waypoints props
 const props = defineProps({
   vehiclePosition: {
+    type: Array,
+    required: true
+  },
+  waypoints: {
     type: Array,
     required: true
   }
@@ -47,6 +63,8 @@ const popupLocation = ref([0, 0])
 let pressTimer = null
 let map = null
 let wasLongPress = false 
+
+const emit = defineEmits(['addWaypoint', 'moveVehicle', 'discardWaypoint'])
 
 function onMapReady(leafletMap) {
   map = leafletMap
@@ -87,14 +105,24 @@ function onMapReady(leafletMap) {
 
 
 function handleAddWaypoint() {
-  console.log("Add Waypoint clicked at:", popupLocation.value)
+  const waypoint = {
+    id: Date.now(), // Use timestamp as unique ID
+    name: `Waypoint ${Date.now()}`,
+    location: popupLocation.value
+  }
+  emit('addWaypoint', waypoint)
+  console.log("Add Waypoint clicked at:", waypoint)
 }
 
-function handleMoveVehicle() {
-  console.log("Move Vehicle clicked at:", popupLocation.value)
+function handleMoveVehicle(position) {
+  emit('moveVehicle', position)
+  showPopup.value = false
+  console.log("Move Vehicle clicked at:", position)
 }
 
-function handleDiscard() {
-  console.log("Discard clicked at:", popupLocation.value)
+function handleDiscard(id) {
+  emit('discardWaypoint', id)
+  showPopup.value = false
+  console.log("Discard clicked for waypoint:", id)
 }
 </script>
