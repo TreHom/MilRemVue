@@ -1,12 +1,12 @@
 <template>
-  <button class="engine-start-btn" :class="{ 'engine-running': props.engineStatus }" @click="toggleEngine">
+  <button class="engine-start-btn" :class="{ 'engine-running': props.engineStatus }" @click="$emit('updateEngineStatus', !props.engineStatus)">
     <img src="../assets/engine-svgrepo-com.svg" alt="Engine Icon" class="engine-icon">
     <span>{{ engineStatus ? 'Engine Running' : 'Engine Start' }}</span>
   </button>
 </template>
 
 <script setup>
-import { defineProps,defineEmits } from 'vue';
+import { defineProps } from 'vue';
 
 const props = defineProps({
   engineStatus: {
@@ -14,12 +14,6 @@ const props = defineProps({
     required: true
   }
 });
-//defines component named updateEngineStatus to emit
-const emit = defineEmits(['updateEngineStatus']);
-//emits component named updateEngineStatus with value !props.engineStatus
-const toggleEngine = () => {
-  emit('updateEngineStatus', !props.engineStatus);
-};
 
 </script>
 

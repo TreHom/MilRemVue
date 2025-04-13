@@ -2,19 +2,22 @@
   <div class="app-container">
     <EngineStart :engineStatus="engineStatus" @updateEngineStatus="updateEngineStatus" />
     <MapApplication :vehiclePosition="vehiclePosition" />
+    <MovementControls :engineStatus="engineStatus" />
   </div>
 </template>
 
 <script>
 import MapApplication from './components/MapApplication.vue'
 import EngineStart from './components/EngineStart.vue'
+import MovementControls from './components/MovementControls.vue'
 import { ref } from 'vue'
 
 export default {
   name: 'App',
   components: {
     MapApplication,
-    EngineStart
+    EngineStart,
+    MovementControls
   },
   setup() {
     const vehiclePosition = ref([58.3776, 26.7290])
