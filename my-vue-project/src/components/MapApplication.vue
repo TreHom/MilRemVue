@@ -1,6 +1,6 @@
 <template>
   <l-map
-    style="height: 1000px; width: 100%;"
+    style="height: 90%; width: 100%;"
     :zoom="100"
     :center="props.vehiclePosition"
   >

@@ -1,27 +1,35 @@
 <template>
-  <MapApplication :vehiclePosition="vehiclePosition" />
+  <div class="app-container">
+    <EngineStart :engineStatus="engineStatus" @updateEngineStatus="updateEngineStatus" />
+    <MapApplication :vehiclePosition="vehiclePosition" />
+  </div>
 </template>
 
 <script>
 import MapApplication from './components/MapApplication.vue'
-
+import EngineStart from './components/EngineStart.vue'
 import { ref } from 'vue'
 
 export default {
   name: 'App',
   components: {
     MapApplication,
-    
+    EngineStart
   },
+  setup() {
+    const vehiclePosition = ref([58.3776, 26.7290])
+    const engineStatus = ref(false)
+    const updateEngineStatus = (newStatus) => {
+      engineStatus.value = newStatus
+    }
 
-setup() {
-  const vehiclePosition = ref([58.3776, 26.7290])
-  return {
-    vehiclePosition
+    return {
+      vehiclePosition,
+      engineStatus,
+      updateEngineStatus
+    }
   }
 }
-}
-
 </script>
 
 <style>
@@ -31,6 +39,13 @@ setup() {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 </style>
