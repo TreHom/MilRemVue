@@ -2,18 +2,21 @@
   <l-map
     style="height: 1000px; width: 100%;"
     :zoom="100"
-    :center="vehiclePosition"
+    :center="props.vehiclePosition"
   >
     <l-tile-layer
       :url="tileUrl"
       :attribution="attribution"
     />
+    <VehicleMarker :vehiclePosition="props.vehiclePosition" />
   </l-map>
 </template>
 
 <script setup>
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer} from '@vue-leaflet/vue-leaflet'
+import { defineProps } from 'vue'
+import VehicleMarker from './VehicleMarker.vue'
 
 const props = defineProps({
   vehiclePosition: {

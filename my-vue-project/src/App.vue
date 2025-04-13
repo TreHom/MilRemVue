@@ -1,16 +1,27 @@
 <template>
-  <MapApplication/>
+  <MapApplication :vehiclePosition="vehiclePosition" />
 </template>
 
 <script>
 import MapApplication from './components/MapApplication.vue'
 
+import { ref } from 'vue'
+
 export default {
   name: 'App',
   components: {
-    MapApplication
+    MapApplication,
+    
+  },
+
+setup() {
+  const vehiclePosition = ref([58.3776, 26.7290])
+  return {
+    vehiclePosition
   }
 }
+}
+
 </script>
 
 <style>
