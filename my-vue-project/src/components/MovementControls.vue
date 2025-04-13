@@ -19,12 +19,12 @@
     }
   })
   </script>
-  //Had AI write me this design for the buttons 
+  //Had AI write me the initial design for the buttons 
   <style scoped>
   .control-panel {
     position: absolute;
     bottom: 20px;
-    right: 20px;
+    left: 50%;
     background: white;
     padding: 10px;
     border-radius: 8px;
