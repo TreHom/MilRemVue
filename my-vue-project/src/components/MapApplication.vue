@@ -1,8 +1,8 @@
 <template>
   <l-map
     style="height: 1000px; width: 100%;"
-    :zoom="13"
-    :center="[58.3776, 26.7290]"
+    :zoom="100"
+    :center="vehiclePosition"
   >
     <l-tile-layer
       :url="tileUrl"
@@ -15,7 +15,14 @@
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer} from '@vue-leaflet/vue-leaflet'
 
+const props = defineProps({
+  vehiclePosition: {
+    type: Array,
+    required: true
+  }
+})
 
 const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 const attribution = '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+
 </script>
